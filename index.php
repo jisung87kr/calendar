@@ -35,7 +35,7 @@
          <div class="container">
 
              <div id="calendar"></div>
-         </div>
+         </div>  
          <script type="text/javascript">
              $(document).ready(function(){
                 function getToday(){
