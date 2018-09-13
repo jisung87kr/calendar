@@ -66,6 +66,7 @@ if(isset($_GET['ymd'])){
         </thead>
         <tbody>
             <?php
+
             $day = 1;
             for ($row=1; $row <= $date['totalWeek'] ; $row++) {
                 echo "<tr>";
@@ -74,19 +75,22 @@ if(isset($_GET['ymd'])){
                     if( (!($row == 1 && $col < $date['dayOfMonth']) || ($row == $date['totalWeek'] && $col > $date['lastDayOfMonth'])) ){
                         if($day <= $date['monthLength']){
                             if($col == 0){
-                               echo "<span class='sun'>".$day."</span>";
+                               echo "<span class='sun'>";
                             } else if ($col == 6){
-                               echo "<span class='sat'>".$day."</span>";
-                            } else if ($day == date('j')){
-                               echo "<span class='today'>".$day."</span>";
+                               echo "<span class='sat'>";
                             } else {
-                               echo "<span class='normal'>".$day."</span>";
+                               echo "<span class='normal'>";
+                            }
+
+                            if(date("Ynj") == $date['y'].$date['m'].$day){
+                                echo "<span class='today'>".$day."</span></span>";
+                            } else {
+                                echo $day."</span>";
                             }
                             $day++;
                         }
                     }
                     echo "</td>";
-
                 }
                 echo "</tr>";
             }
