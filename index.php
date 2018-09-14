@@ -29,13 +29,21 @@
              .sat{
                  color : rgb(4, 83, 187);
              }
+
+             .today{
+                 font-weight: bold;
+             }
+
+             a{
+                 color: #000;
+             }
          </style>
      </head>
      <body>
          <div class="container">
 
              <div id="calendar"></div>
-         </div>  
+         </div>
          <script type="text/javascript">
              $(document).ready(function(){
                 function getToday(){

@@ -82,11 +82,15 @@ if(isset($_GET['ymd'])){
                                echo "<span class='normal'>";
                             }
 
-                            if(date("Ynj") == $date['y'].$date['m'].$day){
-                                echo "<span class='today'>".$day."</span></span>";
+                            $thisDay = $date['y'].$date['m'].$day;
+                            if(date("Ynj") == $thisDay){
+                                $class = "today";
                             } else {
-                                echo $day."</span>";
+                                $class = "";
                             }
+                            
+                            echo "<a href='./write.php?ymd=$thisDay' class='$class'>".$day."</a>";
+                            echo "</span>";
                             $day++;
                         }
                     }
