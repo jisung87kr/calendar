@@ -88,7 +88,9 @@ if(isset($_GET['ymd'])){
                             } else {
                                 $class = "";
                             }
-                            
+
+                            $thisDay = $date['y']."-".sprintf('%02d',$date['m'])."-".sprintf('%02d',$day);
+
                             echo "<a href='./write.php?ymd=$thisDay' class='$class'>".$day."</a>";
                             echo "</span>";
                             $day++;
