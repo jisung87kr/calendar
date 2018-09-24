@@ -12,9 +12,9 @@
                          </td>
                      </tr>
                      <tr>
-                         <th><label for="user_name">작성자</label></th>
+                         <th><label for="author">작성자</label></th>
                          <td>
-                             <input type="text" name="user_name" value="" id="user_name">
+                             <input type="text" name="author" value="" id="author">
                          </td>
                      </tr>
                      <tr>
@@ -28,7 +28,7 @@
                      <tr>
                          <tr>
                              <td colspan="2">
-                                 <textarea name="name" rows="8" cols="80"></textarea>
+                                 <textarea name="content" rows="8" cols="80"></textarea>
                              </td>
                          </tr>
                      </tr>
