@@ -1,4 +1,5 @@
 <?php
+include_once './db.php';
 $filename = basename($_SERVER['PHP_SELF']);
 switch ($filename) {
     case 'write.php':
