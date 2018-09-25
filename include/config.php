@@ -8,9 +8,5 @@
 
     ////////////////////////////////////////////////
     include_once 'class.php';
-
-
-
-
-
+    $post = new Schedule('schedules');
  ?>
