@@ -15,15 +15,25 @@
                          </tr>
                      </thead>
                      <tbody>
-                         <tr>
-                             <td><?php echo $post->id?></td>
-                             <td><a href="./view.php?id="<?php echo $post->id?>></a><?php echo $post->title?></td>
-                             <td><?php echo $post->author?></td>
-                             <td><?php echo $post->start_date?></td>
-                             <td><?php echo $post->start_end?></td>
-                         </tr>
+                         <?php
+                         $list = $post->getList($mysqli);
+                         for ($i=0; $i <count($list[0]); $i++) {
+                             ?>
+                             <tr>
+                                 <td><?php echo $list[0][$i]['id']?></td>
+                                 <td><a href="./view.php?id="<?php echo $list[0][$i]['id']?>></a><?php echo $list[0][$i]['title']?></td>
+                                 <td><?php echo $list[0][$i]['author']?></td>
+                                 <td><?php echo $list[0][$i]['start_date']?></td>
+                                 <td><?php echo $list[0][$i]['end_date']?></td>
+                             </tr>
+                             <?php
+                         }
+                         ?>
                      </tbody>
                  </table>
+                 <div class="center-block">
+                     <?php echo $list[1] ?>
+                 </div>
              </div>
          </div>
 <?php include_once "./include/footer.php"  ?>
