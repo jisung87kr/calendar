@@ -31,11 +31,26 @@
         }
 
         public function getList($mysqli){
-            $sql = "SELECT * FROM $this->table";
-            $result =  $mysqli->query($sql);
-            $data = [];
+            if(isset($_GET['select']) && isset($_GET['keyword'])){ // 검색일 경우
+                if($_GET['select'] != 'all'){
+                    $select = $mysqli->real_escape_string($_GET['select']);
+                    $keyword = '%'.$_GET['keyword'].'%';
+                    $sql = "SELECT count(*) AS cnt FROM $this->table WHERE $select LiKE ?";
+                    $stmt = $mysqli->prepare($sql);
+                    $stmt->bind_param('s', $keyword);
+                }
+            } else { //전체 리스트
+                $sql = "SELECT count(*) AS cnt FROM $this->table";
+            }
 
-            $total = $result->num_rows; //전체 행의수
+            $stmt->execute();
+            $stmt->bind_result($cnt);
+            $result = $stmt->fetch();
+            $stmt->close();
+
+
+            $data = [];
+            $total = $cnt; //전체 행의수
             $list = 10; // 한페이지에 보이는 게시글의 수
             $block = 3; // 블록당 페이지의 수
             $pageNum = ceil($total/10); // 전체 페이지의 수
@@ -53,32 +68,54 @@
             $s_limit = ($page-1)* $list;
 
 
-            $sql = "SELECT * FROM $this->table ORDER BY start_date ASC LIMIT $s_limit, $list";
-            $result = $mysqli->query($sql);
+            if(isset($_GET['select']) && isset($_GET['keyword'])){
+                $select = $mysqli->real_escape_string($_GET['select']);
+                $keyword = '%'.$_GET['keyword'].'%';
+                $sql = "SELECT * FROM $this->table WHERE author LIKE ? ORDER BY start_date DESC LIMIT $s_limit, $list";
+                $stmt = $mysqli->prepare($sql);
+                $stmt->bind_param('s', $keyword);
+
+            } else {
+                $sql = "SELECT * FROM $this->table ORDER BY start_date DESC LIMIT $s_limit, $list";
+                $stmt = $mysqli->prepare($sql);
+            }
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+
             for ($i=0; $row = $result->fetch_array(MYSQLI_ASSOC); $i++) {
                 $data[$i] = $row;
             }
+            $stmt->close();
 
-            $paging = $this->getPaging($s_page, $e_page, $pageNum, $page);
+            $select = isset($_GET['select']) ? $_GET['select'] : false;
+            $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
+
+            $paging = $this->getPaging($s_page, $e_page, $pageNum, $page, $select, $keyword);
 
             return [$data, $paging];
         }
 
-        function getPaging($s_page, $e_page, $pageNum, $page){
+        function getPaging($s_page, $e_page, $pageNum, $page, $select, $keyword){
+            if($select && $keyword){
+                $qsting = "&select=".$select."&keyword=".$keyword;
+            } else {
+                $qsting = "";
+            }
             $paging = "<nav><ul class='pagination'>";
             if($s_page-1 >= 1){
-                $paging .= "<li><a href='list.php?page=1'>first</a></li>";
-                $paging .= "<li><a href='list.php?page=".($s_page-1)."'>prev</a></li>";
+                $paging .= "<li><a href='list.php?page=1'.$qsting>first</a></li>";
+                $paging .= "<li><a href='list.php?page=".($s_page-1).$qsting."'>prev</a></li>";
             }
 
             for ($i=$s_page; $i <= $e_page; $i++) {
                 $active = ($page == $i)? "active" : "";
-                $paging .= "<li class='".$active."'><a href='./list.php?page=".$i."'>".$i."</a></li>";
+                $paging .= "<li class='".$active."'><a href='./list.php?page=".$i.$qsting."'>".$i."</a></li>";
             }
 
             if($e_page+1 <= $pageNum){
-                $paging .= "<li><a href='list.php?page=".($e_page+1)."'>next</a></li>";
-                $paging .= "<li><a href='list.php?page=".$pageNum."'>last</a></li>";
+                $paging .= "<li><a href='list.php?page=".($e_page+1).$qsting."'>next</a></li>";
+                $paging .= "<li><a href='list.php?page=".$pageNum.$qsting."'>last</a></li>";
             }
 
             $paging .= "</ul></nav>";

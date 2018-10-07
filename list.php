@@ -33,6 +33,20 @@
                  </table>
                  <div class="center-block">
                      <?php echo $list[1] ?>
+                     <div class="row">
+                         <form class="search col-sm-6 col-sm-push-3" action="list.php" method="GET">
+                             <select class="select" name="select">
+                                 <option value="all">전체</option>
+                                 <option value="author">작성자</option>
+                                 <option value="title">제목</option>
+                                 <option value="content">내용</option>
+                                 <option value="start_date">시작일</option>
+                                 <option value="eend_date">종료일</option>
+                             </select>
+                             <input type="text" name="keyword" value="">
+                             <input type="submit" name="" value="검색" class="btn btn-default">
+                         </form>
+                     </div>
                  </div>
              </div>
          </div>

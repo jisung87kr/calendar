@@ -29,3 +29,7 @@
 a{
     color: #000;
 }
+
+.select{
+    width: 100px !important;
+}
