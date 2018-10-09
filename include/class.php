@@ -4,13 +4,25 @@
             $this->table = $table;
         }
 
-        public function write($mysqli, $author, $title, $content, $start_date, $end_date){
+        public function write($mysqli, $author, $title, $content, $start_date, $end_date, $m, $id){
+            if($m == 'u'){
+                $sql = "UPDATE $this->table SET author = ?, title = ?, content = ?, start_date = ?, end_date = ? WHERE id = ?";
+                $stmt = $mysqli->prepare($sql);
+                $stmt->bind_param('sssssi', $author, $title, $content, $start_date, $end_date, $id);
+                $stmt->execute();
+                $stmt->close();
+                $this->insert_id = $id;
+                return false;
+            }
+
             $sql = "INSERT INTO $this->table (author, title, content, start_date, end_date) VALUES (?, ?, ?, ?, ?)";
             $stmt = $mysqli->prepare($sql);
             $stmt->bind_param('sssss', $author, $title, $content, $start_date, $end_date);
             $stmt->execute();
             $stmt->close();
             $this->insert_id = $mysqli->insert_id;
+
+
         }
 
         public function getPost($mysqli, $id){

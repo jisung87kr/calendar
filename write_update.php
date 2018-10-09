@@ -1,10 +1,6 @@
 <?php
     include_once './include/config.php';
 
-    for ($i=0; $i < 100; $i++) {
-        $post->write($mysqli, $_POST['author'], $_POST['title'], $_POST['content'], $_POST['start_date'], $_POST['end_date']);
-    }
-
-
+    $post->write($mysqli, $_POST['author'], $_POST['title'], $_POST['content'], $_POST['start_date'], $_POST['end_date'], $_POST['m'], $_POST['id']);
     header("Location:./view.php?id=".$post->insert_id);
 ?>

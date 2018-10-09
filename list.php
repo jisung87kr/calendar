@@ -21,7 +21,7 @@
                              ?>
                              <tr>
                                  <td><?php echo $list[0][$i]['id']?></td>
-                                 <td><a href="./view.php?id="<?php echo $list[0][$i]['id']?>></a><?php echo $list[0][$i]['title']?></td>
+                                 <td><a href="./view.php?id=<?php echo $list[0][$i]['id']?>"><?php echo $list[0][$i]['title']?></a></td>
                                  <td><?php echo $list[0][$i]['author']?></td>
                                  <td><?php echo $list[0][$i]['start_date']?></td>
                                  <td><?php echo $list[0][$i]['end_date']?></td>

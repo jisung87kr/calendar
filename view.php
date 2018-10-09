@@ -16,7 +16,7 @@ $post->getPost($mysqli, $_GET['id']);
                 </div>
                 <div class="panel-body"><?php echo $post->content?></div>
                 <div class="panel-footer">
-                    <a href="#" class="btn btn-default">수정</a>
+                    <a href="./write.php?m=u&id=<?php echo $post->id?>" class="btn btn-default">수정</a>
                     <a href="./" class="btn btn-primary">목록</a>
                 </div>
             </div>
