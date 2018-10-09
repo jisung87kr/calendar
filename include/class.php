@@ -22,6 +22,10 @@
             $stmt->fetch();
             $stmt->close();
 
+            if(!$id){
+                die('게시글이 없습니다.');
+            }
+
             $this->id = $id;
             $this->title = $title;
             $this->author = $author;
