@@ -30,7 +30,7 @@
             $stmt = $mysqli->prepare($sql);
             $stmt->bind_param('i', $id);
             $stmt->execute();
-            $stmt->bind_result($id, $title, $author, $content, $start_date, $end_date);
+            $stmt->bind_result($id, $author, $title, $content, $start_date, $end_date);
             $stmt->fetch();
             $stmt->close();
 

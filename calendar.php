@@ -1,4 +1,6 @@
 <?php
+include './include/config.php';
+
 function __getDate($date){
     date_default_timezone_set("Asia/Seoul");
     $days = array('일', '월', '화', '수', '목', '금', '토');
@@ -6,6 +8,8 @@ function __getDate($date){
     $y = date('Y', strtotime($date));
     $m = date('n', strtotime($date));
     $j = date('j', strtotime($date));
+    $mm = date('m', strtotime($date));
+    $d = date('d', strtotime($date));
     $dayOfMonth = date('w', mktime(0, 0, 0, $m, 1, $y));
     $monthLength = date('t', strtotime($ymd));
     $lastDayOfMonth = date('w', mktime(0, 0, 0, $m, $monthLength, $y));
@@ -13,6 +17,8 @@ function __getDate($date){
     $startWeek = date('Y-m-d', strtotime($ymd." -".$dayOfTheWeek." day"));
     $lastWeek = date('Y-m-d', strtotime($startWeek.' +6 day'));
     $totalWeek = ceil(($monthLength+$dayOfMonth)/7);
+    $startOfMonth = $y.$mm.'1';
+    $endOfMonth = $y.$mm.$d;
     $dateArr = [
         "y" => $y,
         "m" => $m,
@@ -27,7 +33,9 @@ function __getDate($date){
         "startWeek" => $startWeek,
         "lastWeek" => $lastWeek,
         "ymd" => $ymd,
-        "totalWeek" => $totalWeek
+        "totalWeek" => $totalWeek,
+        "startOfMonth" => $startOfMonth,
+        "endOfMonth" => $endOfMonth
     ];
 
     return $dateArr;
@@ -38,6 +46,8 @@ if(isset($_GET['ymd'])){
 } else {
     $date = __getDate(date("Ymd"));
 }
+
+
  ?>
 
 <div class="calendar">
@@ -53,6 +63,14 @@ if(isset($_GET['ymd'])){
         </div>
     </div>
     <table class="table table-bordered">
+        <colgroup>
+            <col width="14.2857%">
+            <col width="14.2857%">
+            <col width="14.2857%">
+            <col width="14.2857%">
+            <col width="14.2857%">
+            <col width="14.2857%">
+        </colgroup>
         <thead>
             <tr>
                 <th><span class="sun">일</span></th>
@@ -66,7 +84,6 @@ if(isset($_GET['ymd'])){
         </thead>
         <tbody>
             <?php
-
             $day = 1;
             for ($row=1; $row <= $date['totalWeek'] ; $row++) {
                 echo "<tr>";
@@ -91,7 +108,13 @@ if(isset($_GET['ymd'])){
 
                             $thisDay = $date['y']."-".sprintf('%02d',$date['m'])."-".sprintf('%02d',$day);
 
+                            $sql = "SELECT * FROM schedules WHERE start_date <= '$thisDay' AND end_date >= '$thisDay' ORDER BY start_date, title";
+                            $result = $mysqli->query($sql);
+
                             echo "<a href='./write.php?ymd=$thisDay' class='$class'>".$day."</a>";
+                            while ($post = $result->fetch_array(MYSQLI_ASSOC)) {
+                                echo "<div><a href='./view.php?id=".$post['id']."'>".$post['title']."</a><div>";
+                            }
                             echo "</span>";
                             $day++;
                         }
