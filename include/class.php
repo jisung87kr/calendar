@@ -31,7 +31,7 @@
         }
 
         public function getList($mysqli){
-            if(isset($_GET['select']) && isset($_GET['keyword'])){ // 검색일 경우
+            if(!empty($_GET['select']) && !empty($_GET['keyword'])){ // 검색일 경우
                 if($_GET['select'] != 'all'){
                     $select = $mysqli->real_escape_string($_GET['select']);
                     $keyword = '%'.$_GET['keyword'].'%';
@@ -41,6 +41,7 @@
                 }
             } else { //전체 리스트
                 $sql = "SELECT count(*) AS cnt FROM $this->table";
+                $stmt = $mysqli->prepare($sql);
             }
 
             $stmt->execute();
@@ -68,7 +69,7 @@
             $s_limit = ($page-1)* $list;
 
 
-            if(isset($_GET['select']) && isset($_GET['keyword'])){
+            if(!empty($_GET['select']) && !empty($_GET['keyword'])){
                 $select = $mysqli->real_escape_string($_GET['select']);
                 $keyword = '%'.$_GET['keyword'].'%';
                 $sql = "SELECT * FROM $this->table WHERE author LIKE ? ORDER BY start_date DESC LIMIT $s_limit, $list";
@@ -88,8 +89,8 @@
             }
             $stmt->close();
 
-            $select = isset($_GET['select']) ? $_GET['select'] : false;
-            $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : false;
+            $select = (empty($_GET['select']) == false) ? $_GET['select'] : false;
+            $keyword = (empty($_GET['keyword']) == false) ? $_GET['keyword'] : false;
 
             $paging = $this->getPaging($s_page, $e_page, $pageNum, $page, $select, $keyword);
 
@@ -104,7 +105,7 @@
             }
             $paging = "<nav><ul class='pagination'>";
             if($s_page-1 >= 1){
-                $paging .= "<li><a href='list.php?page=1'.$qsting>first</a></li>";
+                $paging .= "<li><a href='list.php?page=1".$qsting."'>first</a></li>";
                 $paging .= "<li><a href='list.php?page=".($s_page-1).$qsting."'>prev</a></li>";
             }
 
